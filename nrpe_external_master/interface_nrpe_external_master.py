@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 """Nrpe external master interface."""
-from datetime.datetime import now as now_time
+from datetime import datetime.now as now_time
 import logging
 from pathlib import Path
 
