@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 """Nrpe external master interface."""
-import datetime
+from datetime.datetime import now as now_time
 import logging
 from pathlib import Path
 
@@ -101,8 +101,7 @@ class Nrpe(Object):
                   unit) -> None:
         """Add nagios check."""
         relation = self._relation
-        unit = self.model.unit.name.replace('/', '-')
-        context_from_config = self._charm.model.config['nagios_context']
+        unit = unit.name.replace('/', '-')
 
         context = self._stored.nagios_host_context
         host_name = self._stored.nagios_hostname
@@ -132,7 +131,8 @@ define service {
         })
         self._nagios_files.add(str(check_filename))
 
-        service_filename = Path(f"/var/lib/nagios/export/service__{unit}_{name}.cfg")
+        service_filename = \
+            Path(f"/var/lib/nagios/export/service__{unit}_{name}.cfg")
         service_filename.write_text(service_tmpl % {
             'servicegroups': servicegroups or context,
             'context': context,
@@ -143,4 +143,4 @@ define service {
         })
         self._nagios_files.add(str(service_filename))
 
-        relation.data[self.model.unit]['timestamp'] = datetime.datetime.now().isoformat()
+        relation.data[self.model.unit]['timestamp'] = now_time().isoformat()
