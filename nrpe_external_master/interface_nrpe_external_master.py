@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 """Nrpe external master interface."""
-from datetime import datetime.now as now_time
+from datetime import datetime
 import logging
 from pathlib import Path
 
@@ -143,4 +143,5 @@ define service {
         })
         self._nagios_files.add(str(service_filename))
 
-        relation.data[self.model.unit]['timestamp'] = now_time().isoformat()
+        iso_time = datetime.now().isoformat()
+        relation.data[self.model.unit]['timestamp'] = iso_time
