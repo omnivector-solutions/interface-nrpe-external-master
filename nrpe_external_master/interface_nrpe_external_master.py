@@ -96,7 +96,7 @@ define service {
 
         slurm_checks = [
             {
-                'check_args': slurm_process_check_args,
+                'check_args': " ".join(slurm_process_check_args),
                 'check_name': slurm_component,
                 'host_name': host_name,
                 'unit_name': unit,
@@ -105,7 +105,7 @@ define service {
                 'servicegroups': conf.get('nagios_servicegroups') or context,
             },
             {
-                'check_args': munged_process_check_args,
+                'check_args': " ".join(munged_process_check_args),
                 'check_name': "munged",
                 'host_name': host_name,
                 'unit_name': unit,
