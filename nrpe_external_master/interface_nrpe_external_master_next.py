@@ -4,7 +4,7 @@ import datetime
 import logging
 from pathlib import Path
 
-from charmhelpers_nrpe import NRPE as CH_NRPE
+from nrpe_external_master.charmhelpers_nrpe import NRPE as CH_NRPE
 from ops.framework import Object
 
 
