@@ -11,7 +11,6 @@ from ops.framework import (
     EventSource,
     Object,
     ObjectEvents,
-    StoredState,
 )
 
 
@@ -31,7 +30,6 @@ class NrpeEvents(ObjectEvents):
 class Nrpe(Object):
     """Nrpe Interface."""
 
-    _stored = StoredState()
     on = NrpeEvents()
 
     def __init__(self, charm, relation_name):
@@ -39,12 +37,6 @@ class Nrpe(Object):
         super().__init__(charm, relation_name)
         self._charm = charm
         self._relation_name = relation_name
-
-        self._stored.set_default(
-            nagios_check_files=set(),
-            nagios_host_context=str(),
-            nagios_hostname=str(),
-        )
 
         self.framework.observe(
             self._charm.on[self._relation_name].relation_changed,
@@ -64,8 +56,6 @@ class Nrpe(Object):
             context = nagios_host_context
         else:
             context = context_from_config
-
-        self._stored.nagios_host_context = context
 
         host_name = ""
         nagios_hostname = relation.__dict__.get('nagios_hostname')
@@ -140,15 +130,6 @@ define service {
             relation_cmd_line = [
                 'relation-set', '-r', rel_id, f'timestamp={iso_time}']
             subprocess.call(relation_cmd_line)
-
-    def _on_relation_broken(self, event):
-        files = self._nagios_files
-        for f in files:
-            try:
-                Path(f).unlink()
-            except Exception as e:
-                logger.debug(f"failed to remove {f}: {e}")
-        files = set()
 
 
 def _relation_ids(reltype):
