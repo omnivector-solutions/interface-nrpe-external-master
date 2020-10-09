@@ -126,10 +126,7 @@ define service {
             service_filename.write_text(service_tmpl % check)
 
         iso_time = datetime.now().isoformat()
-        for rel_id in _relation_ids(self._relation_name):
-            relation_cmd_line = [
-                'relation-set', '-r', rel_id, f'timestamp={iso_time}']
-            subprocess.call(relation_cmd_line)
+        relation.data[self.model.unit]['timestamp'] = iso_time
 
 
 def _relation_ids(reltype):
